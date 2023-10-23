@@ -5,4 +5,4 @@ Based on the docker images provided by https://hub.docker.com/r/thekevjames/nox 
 
 To run your tests locally, you could do:
 
-    docker run --rm -it -v $(pwd):/src bartdorlandt/nox:latest nox -f src/noxfile.py
+    docker run --rm -it -v $(pwd):/src bartdorlandt/nox_poetry:latest nox -f src/noxfile.py
