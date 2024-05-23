@@ -2,7 +2,9 @@ FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/GMT
-COPY requirements.txt /
+ENV PATH="$PATH:/root/.local/bin"
+
+# Keep track of which versions are end-of-life
 # https://devguide.python.org/#status-of-python-branches
 RUN apt-get update -qy && \
     apt-get install -qy --no-install-recommends \
@@ -21,8 +23,15 @@ RUN apt-get update -qy && \
         python3.9 python3.9-distutils python3.9-venv python3.9-dev \
         python3.10 python3.10-dev python3.10-venv \
         python3.11 python3.11-dev python3.11-venv \
-        python3.12 python3.12-dev python3.12-venv && \
+        python3.12 python3.12-dev python3.12-venv \
         python3.13 python3.13-dev python3.13-venv && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     rm -rf /var/cache/apt/lists && \
-    apt-get autoclean && apt-get clean
+    apt-get autoclean && apt-get clean && \
+    python3.12 -m venv .venv && \
+    . .venv/bin/activate && \
+    pip install pipx && \
+    pipx ensurepath &&  \
+    pipx install nox && \
+    pipx install --preinstall nox-poetry poetry && \
+    rm -rf .venv
