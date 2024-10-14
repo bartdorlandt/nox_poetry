@@ -1,0 +1,20 @@
+version: "3"
+
+env:
+  VERSION: latest
+  IMAGE: python_nox_poetry
+  PLATFORM: linux/amd64
+
+tasks:
+  default: task --list-all --sort none
+
+  build:
+    desc: Build the {{.IMAGE}} docker image
+    aliases: [docker]
+    cmds:
+      - docker buildx build -f Dockerfile -t {{.IMAGE}}:{{.VERSION}} --platform {{.PLATFORM}} .
+
+  run:
+    desc: Run the {{.IMAGE}} docker image
+    cmds:
+      - docker run --rm -it {{.IMAGE}}:{{.VERSION}} /bin/bash
