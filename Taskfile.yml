@@ -3,7 +3,7 @@ version: "3"
 env:
   VERSION: latest
   IMAGE: python_nox_poetry
-  PLATFORM: linux/amd64
+  PLATFORM: linux/amd64,linux/arm64
 
 tasks:
   default: task --list-all --sort none
@@ -18,3 +18,10 @@ tasks:
     desc: Run the {{.IMAGE}} docker image
     cmds:
       - docker run --rm -it {{.IMAGE}}:{{.VERSION}} /bin/bash
+
+  mac_multiplatform:
+    desc: Build the {{.IMAGE}} docker image for multiplatform on a mac
+    cmds:
+      - docker buildx create --name multiplatform --use
+      - docker buildx install
+      - task: build
