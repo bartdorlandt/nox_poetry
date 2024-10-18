@@ -35,18 +35,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Build and export to Docker
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     platforms: linux/amd64,linux/arm64
-      #     context: .
-      #     push: false
-      #     tags: ${{ env.TEST_TAG }}
-
-      # - name: Test
-      #   run: |
-      #     docker run --rm ${{ env.TEST_TAG }}
-
       - name: Build and push with date number
         uses: docker/build-push-action@v6
         with:
@@ -62,3 +50,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.LATEST_TAG }}
+        if: github.event_name != 'pull_request'
