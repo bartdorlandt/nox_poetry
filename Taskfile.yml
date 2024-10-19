@@ -3,16 +3,42 @@ version: "3"
 env:
   VERSION: latest
   IMAGE: python_nox_poetry
-  PLATFORM: linux/amd64
 
 tasks:
   default: task --list-all --sort none
 
+  build_image:
+    desc: Build the {{.IMAGE}} docker image for a given architecture
+    internal: true
+    cmd: docker buildx build -f Dockerfile -t {{.IMAGE}}:{{.VERSION}} --platform linux/{{.ARCH}} .
+    requires:
+      vars:
+        - ARCH
+
   build:
-    desc: Build the {{.IMAGE}} docker image
+    desc: Build the {{.IMAGE}} docker image for the current architecture
     aliases: [docker]
     cmds:
-      - docker buildx build -f Dockerfile -t {{.IMAGE}}:{{.VERSION}} --platform {{.PLATFORM}} .
+      - task: build_image
+        vars:
+          ARCH:
+            sh: uname -m
+
+  build_amd64:
+    desc: Build the {{.IMAGE}} docker image for linux/amd64
+    aliases: [amd64]
+    cmds:
+      - task: build_image
+        vars:
+          ARCH: amd64
+
+  build_arm64:
+    desc: Build the {{.IMAGE}} docker image for linux/arm64
+    aliases: [arm64]
+    cmds:
+      - task: build_image
+        vars:
+          ARCH: arm64
 
   run:
     desc: Run the {{.IMAGE}} docker image
