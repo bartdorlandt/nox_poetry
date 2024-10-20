@@ -2,7 +2,7 @@ version: "3"
 
 env:
   VERSION: latest
-  IMAGE: python_nox_poetry
+  IMAGE: pythons_nox_poetry_uv
 
 tasks:
   default: task --list-all --sort none

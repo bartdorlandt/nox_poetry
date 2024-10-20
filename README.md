@@ -1,22 +1,25 @@
-# pythons + nox and poetry support 
+# pythons + nox, poetry and uv support
 
 ## Purpose
-A docker image with the currently supported python versions along with nox and poetry. 
+A docker image with the currently supported python versions along with nox, poetry and uv.
 
 ## Build a new release
-Re-running the pipeline will generate a new release. 
+Re-running the pipeline will generate a new release for amd64 and arm64 platforms.
 
-Within the pipeline the `make build` is issued, that will create a new release for the 'linux/amd64' platform, version tag set to latest and the image name python_nox_poetry. 
+### Build it locally
+To build the image locally, you can run:
 
-Each of these can be overwritten with the `-e` flag. 
+    task build
 
-e.g.
+This builds the image with the tag `pythons_nox_poetry_uv:latest` for the platform it is run on.
 
-    make build -e VERSION=test -e PLATFORM=linux/arm64
+To build it with a different version run:
 
+    task VERSION=test build
 
+Type `task` to see some different options.
 
-## Usage
-To run your tests locally, you could do:
+## Usage example
+To run your tests locally, where you have a noxfile in the src directory, you can run:
 
-    docker run --rm -it -v $(pwd):/src bartdorlandt/nox_poetry:latest nox -f src/noxfile.py
+    docker run --rm -it -v $(pwd):/src bartdorlandt/pythons_nox_poetry_uv:latest nox -f src/noxfile.py
